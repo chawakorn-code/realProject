@@ -32,18 +32,26 @@ export default {
       first_name: ''
     }
   },
-  methods: {
-    create () {
-      axios.get('/Back-End/index.js',
-        {
-          first_name: this.first_name
-        }
-      ).then((res) => {
-        return res.json()
-      }).catch((err) => {
+  mounted () {
+    axios.get('http://localhost:3000/api/test')
+      .then((res) => {
+        console.log(res.data[0].name)
+        this.first_name = res.data[0].name
+      })
+      .catch((err) => {
         console.log(err)
       })
-    }
   }
+  // methods: {
+  //   create () {
+  //     axios.get('http://localhost:3000/api/test')
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       this.first_name = res.data;
+  //     }).catch((err) => {
+  //       console.log(err)
+  //     })
+  //   }
+  // }
 }
 </script>

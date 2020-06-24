@@ -8,10 +8,10 @@ const connection = mysql.createConnection({
     port: port
 })
 
-if(error) throw error;
-    connection.connect(function(error){
-    console.log('Database connected on port: ' + port)
-})
+// if(error) throw error;
+//     connection.connect(function(error){
+//     console.log('Database connected on port: ' + port)
+// })
 
 let db = {};
 db.all = () => {
