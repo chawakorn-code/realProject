@@ -6,8 +6,8 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/',apiroutes);
+app.use('/api/test',apiroutes);
 
  app.listen(process.env.PORT || port, () => {
-    console.log('Server is running on port:' + port)
+    console.log('The API server is running on port:' + port)
 })  
