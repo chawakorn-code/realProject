@@ -1,10 +1,10 @@
 const mysql = require('mysql')
-const port = 8000;
+const port = 80;
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'rsquare2',
+    database: 'inventory_management',
     port: port
 })
 
