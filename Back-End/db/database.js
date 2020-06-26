@@ -1,5 +1,5 @@
 const mysql = require('mysql')
-const port = 8000;
+const port = 8000
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -8,10 +8,12 @@ const connection = mysql.createConnection({
     port: port
 })
 
-// if(error) throw error;
-//     connection.connect(function(error){
-//     console.log('Database connected on port: ' + port)
-// })
+connection.connect(function(err) {
+    if(err){
+        console.err('Error connection:'+err.stack)
+    }
+    console.log('connection as port :' + port)
+})
 
 let db = {};
 db.all = () => {
@@ -20,8 +22,34 @@ db.all = () => {
             if(err){
                 return reject(err);
             }
-                return resolve(results);
+            console.log(results)
+            return resolve(results);
         })
     })
 }
+    // const Sequelize = require('sequelize')
+    // const sequelize = new Sequelize('rsquare2','root','',{
+        //     host: 'localhost',
+    //     dialect: 'mysql',
+    //     port: 8000,
+    
+    //     pool:{
+    //         max: 5,
+    //         min: 0,
+    //         acquire: 30000,
+    //         idle: 10000
+    //     }
+    // })
+    
+    // sequelize
+    //     .authenticate()
+    //     .then(() => {
+    //         console.log('Connection complete!!')
+    //     })
+    //     .catch(err => {
+    //         console.error('Unable to connect on the database')
+    //     })
+// db.sequelize = sequelize
+// db.Sequelize = Sequelize
+
 module.exports = db;
