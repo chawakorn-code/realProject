@@ -37,7 +37,7 @@ router.post('/department', (req,res) => {
     })
 })
 
-//update department
+//update department by id
 router.patch('/department/:id', (req,res) => {
     var id = req.params.id
     var newid = req.body.id
