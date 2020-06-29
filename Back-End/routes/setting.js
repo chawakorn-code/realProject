@@ -111,4 +111,19 @@ router.delete('/location', (req,res) => {
     })
 })
 
+//update location by id
+router.patch('/location/:id', (req,res) => {
+    var id = req.params.id
+    var newid = req.body.id
+    var No = req.body.No
+    var name = req.body.name
+    sql = "UPDATE `location` SET `id` = '" + newid + "', `No` = '" + No + "', `name` = '" + name + "' WHERE `location`.`id` = " + id + ";"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 module.exports = router;
