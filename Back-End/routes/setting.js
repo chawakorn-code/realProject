@@ -37,6 +37,21 @@ router.post('/department', (req,res) => {
     })
 })
 
+//update department
+router.patch('/department/:id', (req,res) => {
+    var id = req.params.id
+    var newid = req.body.id
+    var No = req.body.No
+    var name = req.body.name
+    sql = "UPDATE `department` SET `id` = '" + newid + "', `No` = '" + No + "', `name` = '" + name + "' WHERE `department`.`id` = " + id + ";"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 //get all department
 router.get('/department', (req,res) => {
     sql = "SELECT * FROM `department`;"
@@ -65,6 +80,29 @@ router.post('/location', (req,res) => {
     var No = req.body.No
     var name = req.body.name
     sql = "INSERT INTO `location` (`id`, `No`, `name`) VALUES (NULL, '"+ No +"', '" + name + "');"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get all location
+router.get('/location', (req,res) => {
+    sql = "SELECT * FROM `location`;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//delete location
+router.delete('/location', (req,res) => {
+    var id = req.body.id
+    sql = "DELETE FROM `location` WHERE `location`.`id` = " + id
     db.query(sql, (err, results) => {
         if(err){
             throw err
