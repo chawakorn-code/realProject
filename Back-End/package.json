@@ -14,7 +14,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "npx nodemon server.js -w server"
+    "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC"
