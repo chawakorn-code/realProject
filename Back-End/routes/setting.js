@@ -173,7 +173,7 @@ router.delete('/user', (req,res) => {
 //update user by id
 router.patch('/user/:id', (req,res) => {
     var newid = req.body.id
-    var id = req.body.id
+    var id = req.params.id
     var username = req.body.username
     var password = req.body.password
     var name = req.body.name
@@ -181,7 +181,7 @@ router.patch('/user/:id', (req,res) => {
     var role = req.body.role
     var departmentID = req.body.departmentID
     var status = req.body.status
-    sql = "UPDATE `user` SET `id` = '" + newid + "', `username` = '" + username + "', `password` = '" + password + "', `name` = '" + name + "', `email` = '" + email + "', `role` = '" + role + "', `departmentID` = '" + departmentID + "', `status` = '" + status + "' WHERE `user`.`id` = " + id + " "
+    sql = "UPDATE `user` SET `id` = '" + newid + "', `username` = '" + username + "', `password` = '" + password + "', `name` = '" + name + "', `email` = '" + email + "', `role` = '" + role + "', `departmentID` = '" + departmentID + "', `status` = '" + status + "' WHERE `user`.`id` = " + id + ";"
     db.query(sql, (err, results) => {
         if(err){
             throw err
@@ -189,5 +189,60 @@ router.patch('/user/:id', (req,res) => {
     res.send(results)
     })
 })
+
+//add category
+router.post('/category', (req,res) => {
+    var id = req.body.id
+    var No = req.body.No
+    var category = req.body.category
+    var adminID = req.body.adminID
+    sql = "INSERT INTO `category` (`id`, `No`, `category`, `adminID`) VALUES ('" + id + "', '" + No + "', '" + category + "', '" + adminID + "');"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get all category
+router.get('/category', (req,res) => {
+    sql = "SELECT * FROM `category`;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//delete category
+router.delete('/category', (req,res) => {
+    var id = req.body.id
+    sql = "DELETE FROM `category` WHERE `category`.`id` = " + id
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//update category by id
+router.patch('/category/:id', (req,res) => {
+    var newid = req.body.id
+    var id = req.params.id
+    var No = req.body.No
+    var category = req.body.category
+    var adminID = req.body.adminID
+    sql = "UPDATE `category` SET `id` = '" + newid + "', `No` = '" + No + "', `category` = '" + category + "', `adminID` = '" + adminID + "' WHERE `category`.`id` = "+ id + ";"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 
 module.exports = router;
