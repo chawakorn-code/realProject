@@ -13,6 +13,8 @@ app.use('/api/test',apiroutes);
 //set route
 const settingRoute = require('./routes/setting')
 app.use(settingRoute)
+const inventoryRoute = require('./routes/inventory')
+app.use(inventoryRoute)
 
 //start server
 app.listen(process.env.PORT || port, () => {
