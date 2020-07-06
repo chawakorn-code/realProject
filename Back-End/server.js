@@ -15,6 +15,8 @@ const settingRoute = require('./routes/setting')
 app.use(settingRoute)
 const inventoryRoute = require('./routes/inventory')
 app.use(inventoryRoute)
+const transactionRoute = require('./routes/transaction')
+app.use(transactionRoute)
 
 //start server
 app.listen(process.env.PORT || port, () => {
