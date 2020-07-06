@@ -99,4 +99,15 @@ router.delete('/transaction', (req,res) => {
     })
 })
 
+//get all approval
+router.get('/approval', (req,res) => {
+    sql = "SELECT * FROM `approval`;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 module.exports = router;
