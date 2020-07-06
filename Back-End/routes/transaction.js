@@ -110,4 +110,20 @@ router.get('/approval', (req,res) => {
     })
 })
 
+//update approval by id
+router.patch('/approval/:id', (req,res) => {
+    var id = req.params.id
+    var newid = req.body.id
+    var adminID = req.body.adminID
+    var detail = req.body.detail
+    var status = req.body.status
+    sql = "UPDATE `approval` SET `id` = '" + newid + "', `adminID` = '" + adminID + "', `time` = 'CURRENT_TIMESTAMP', `detail` = '" + detail + "', `status` = '" + status + "' WHERE `approval`.`id` = '" + id + "' "
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 module.exports = router;
