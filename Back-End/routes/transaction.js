@@ -83,7 +83,14 @@ router.patch('/transaction/:id', (req,res) => {
 //delete transaction
 router.delete('/transaction', (req,res) => {
     var id = req.body.id
+    sqlf = "DELETE FROM `approval` WHERE `approval`.`transactionID` = " + id
     sql = "DELETE FROM `transaction` WHERE `transaction`.`id` = " + id
+    db.query(sqlf, (err, results) => {
+        if(err){
+            throw err
+        }
+    //res.send(results)
+    })
     db.query(sql, (err, results) => {
         if(err){
             throw err
