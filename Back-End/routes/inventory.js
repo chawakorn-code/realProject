@@ -127,4 +127,37 @@ router.get('/inventory/getid/:name', (req,res) => {
     })
 })
 
+//get inventory where amount > max
+router.get('/inventory/highstock', (req,res) => {
+    sql = "SELECT * FROM `inventory` WHERE `amount` > `max`"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get inventory where amount < min
+router.get('/inventory/lowstock', (req,res) => {
+    sql = "SELECT * FROM `inventory` WHERE `amount` < `min`"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get inventory where amount = 0
+router.get('/inventory/outstock', (req,res) => {
+    sql = "SELECT * FROM `inventory` WHERE `amount` = 0"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 module.exports = router;
