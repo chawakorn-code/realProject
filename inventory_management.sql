@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 06, 2020 at 11:49 AM
+-- Generation Time: Jul 08, 2020 at 10:12 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -42,8 +42,7 @@ CREATE TABLE `approval` (
 --
 
 INSERT INTO `approval` (`id`, `transactionID`, `adminID`, `time`, `detail`, `status`) VALUES
-(1, 1, NULL, NULL, NULL, 'รอการอนุมัติ'),
-(3, 2, NULL, NULL, NULL, 'รอการอนุมัติ');
+(1, 1, NULL, NULL, NULL, 'รอการอนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -111,7 +110,9 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES
-(1, 'test', NULL, 1, 'ตัว', 50, 5, 20, 15, 1, 'เบิกได้');
+(1, 'test', NULL, 1, 'ตัว', 50, 5, 20, 15, 1, 'เบิกได้'),
+(2, 'testlow', NULL, 1, 'ชิ้น', 30.5, 10, 100, 8, 2, 'ใกล้หมดสต็อก'),
+(3, 'testhight', NULL, 1, 'ก้อน', 11.5, 20, 25, 30, 2, 'เบิกได้');
 
 -- --------------------------------------------------------
 
@@ -156,8 +157,7 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`id`, `No`, `type`, `inventoryID`, `time`, `userID`, `amount`, `location`, `detail`) VALUES
-(1, 1, 'ขอเบิก', 1, '2020-07-06 07:48:09', 1, 10, NULL, NULL),
-(2, 2, 'ขอเบิก', 1, '2020-07-06 09:46:11', 1, 12, 'null', 'null');
+(1, 1, 'ขอเบิก', 1, '2020-07-06 07:48:09', 1, 10, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -247,7 +247,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `approval`
 --
 ALTER TABLE `approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -265,7 +265,7 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `location`
@@ -277,7 +277,7 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
