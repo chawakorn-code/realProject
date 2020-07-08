@@ -31,36 +31,36 @@
                 </v-list-group>
 
                 
-                <v-list-item active-class>
+                <v-list-item active-class link>
                     <v-list-item-title>รายการขอเบิก</v-list-item-title>
                 </v-list-item>
 
-                 <!-- <v-list-group no-action value="true">        
+                 <v-list-group no-action value="true">        
                     <template v-slot:activator>
                         <v-list-item-title>รายงาน</v-list-item-title>
                     </template>
                     <v-list-item v-for="(ThirdList, i) in ThirdList" :key="i" link router :to="ThirdList.route">
                         <v-list-item-title v-text="ThirdList.title"></v-list-item-title>
                     </v-list-item>
-                </v-list-group> -->
+                </v-list-group>
 
-                <!-- <v-list-group no-action value="true">
+                <v-list-group no-action value="true">
                     <template v-slot:activator>
                         <v-list-item-title>ตั้งค่าระบบ</v-list-item-title>
                     </template>
                     <v-list-item v-for="(fouthList, i) in fouthList" :key="i" link router :to="fouthList.route">
                         <v-list-item-title v-text="fouthList.title"></v-list-item-title>
                     </v-list-item>
-                </v-list-group> -->
+                </v-list-group>
 
-                <!-- <v-list-group no-action value="true">
+                <v-list-group no-action value="true">
                     <template v-slot:activator>
                         <v-list-item-title>ข้อมูลส่วนตัว</v-list-item-title>
                     </template>
                     <v-list-item v-for="(fiveList, i) in fiveList" :key="i" link router :to="fiveList.route">
                         <v-list-item-title v-text="fiveList.title"></v-list-item-title>
                     </v-list-item>
-                </v-list-group> -->
+                </v-list-group>
 
             </v-list>
         </v-navigation-drawer>
