@@ -1,9 +1,18 @@
 <template>
-  <div class="container">
-    <div class="jumbotron mt-5">
-      <div class="col-sm-8 mx-auto">
-        <h1 class="text-center">WELCOME1</h1>
-      </div>
+  <div>
+    <div class="page-welcome">
+      <span>Welcome to Our website</span>
     </div>
   </div>
 </template>
+<script>
+export default {
+  name: 'Home'
+}
+</script>
+<style lang="css" scoped>
+.page-welcome {
+  height: 2000px;
+  /* background-color: yellow; */
+}
+</style>
