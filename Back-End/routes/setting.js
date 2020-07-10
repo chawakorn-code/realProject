@@ -190,6 +190,28 @@ router.patch('/user/:id', (req,res) => {
     })
 })
 
+//get all user where role = admin 
+router.get('/user', (req,res) => {
+    sql = "SELECT * FROM `user` WHERE `user`.`role` = admin;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get all user where role = user 
+router.get('/user', (req,res) => {
+    sql = "SELECT * FROM `user` WHERE `user`.`role` = user;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 //add category
 router.post('/category', (req,res) => {
     var id = req.body.id
