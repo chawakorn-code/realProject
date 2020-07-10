@@ -42,16 +42,5 @@ export default {
         console.log(err)
       })
   }
-  // methods: {
-  //   create () {
-  //     axios.get('http://localhost:3000/api/test')
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       this.first_name = res.data;
-  //     }).catch((err) => {
-  //       console.log(err)
-  //     })
-  //   }
-  // }
 }
 </script>
