@@ -1,16 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-
+import Listmanagement from '@/components/Listmanagement'
+import addNewItem from '@/components/addNewItem'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      path: '/management',
+      name: 'Listmanagement',
+      component: Listmanagement
+    },
+    {
+      path: '/addNewitem',
+      name: 'addNewItem',
+      component: addNewItem
     }
   ]
 })

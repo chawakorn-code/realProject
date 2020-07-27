@@ -1,85 +1,80 @@
-/* eslint-disable */
 <template>
-  <div id="app-topbar">
-    <nav>
-      <v-toolbar> 
-        <v-app-bar-nav-icon v-on:click="drawer = !drawer"></v-app-bar-nav-icon>
-
-        <v-navigation-drawer app absolute temporary v-model ="drawer" class="amber accent-3" id="nav-sidebar">
-            <v-list dense>
-                <v-list-item>
-                    <!-- Icon of Sidebar -->
-                    <v-list-item-icon>
-                        <v-icon>mdi-home</v-icon>
-                    </v-list-item-icon>
-                    <!-- Title of sidebar -->
-                    <v-list-item-title>Menu</v-list-item-title>
-                </v-list-item>
-
-                <v-list-group no-action>
-                    <template v-slot:activator>                       
-                        <v-list-item-title>รายการวัสดุ</v-list-item-title>
-                    </template>
-                    <v-list-item v-for="(FirstList, i) in FirstList" :key="i" link router :to="FirstList.route">
-                        <v-list-item-title v-text="FirstList.title"></v-list-item-title>
+    <div id="app-topbar">
+        <v-navigation-drawer app v-model ="drawer" class="yellow lighten-3" id="nav-sidebar">
+                <v-list dense>
+                    <v-list-item>
+                        <!-- Icon of Sidebar -->
+                        <v-list-item-icon>
+                            <v-icon>mdi-home</v-icon>
+                        </v-list-item-icon>
+                        <!-- Title of sidebar -->
+                        <v-list-item-title>Menu</v-list-item-title>
                     </v-list-item>
-                    <!-- <v-list-item v-for ="subItem in item.items" :key="subItem.titele" v-on:click="">
-                        <v-list-item-content>
-                            <v-list-item-title v-text="subItem.title"></v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item> -->
-                </v-list-group>
 
-                
-                <v-list-item active-class link>
-                    <v-list-item-title>รายการขอเบิก</v-list-item-title>
-                </v-list-item>
+                    <v-list-group no-action>
+                        <template v-slot:activator>                       
+                            <v-list-item-title>รายการวัสดุ</v-list-item-title>
+                        </template>
+                        <v-list-item v-for="(FirstList, i) in FirstList" :key="i" link router :to="FirstList.route">
+                            <v-list-item-title v-text="FirstList.title"></v-list-item-title>
+                        </v-list-item>
+                        <!-- <v-list-item v-for ="subItem in item.items" :key="subItem.titele" v-on:click="">
+                            <v-list-item-content>
+                                <v-list-item-title v-text="subItem.title"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item> -->
+                    </v-list-group>
 
-                 <v-list-group no-action value="true">        
-                    <template v-slot:activator>
-                        <v-list-item-title>รายงาน</v-list-item-title>
-                    </template>
-                    <v-list-item v-for="(ThirdList, i) in ThirdList" :key="i" link router :to="ThirdList.route">
-                        <v-list-item-title v-text="ThirdList.title"></v-list-item-title>
+                    
+                    <v-list-item active-class link>
+                        <v-list-item-title>รายการขอเบิก</v-list-item-title>
                     </v-list-item>
-                </v-list-group>
 
-                <v-list-group no-action value="true">
-                    <template v-slot:activator>
-                        <v-list-item-title>ตั้งค่าระบบ</v-list-item-title>
-                    </template>
-                    <v-list-item v-for="(fouthList, i) in fouthList" :key="i" link router :to="fouthList.route">
-                        <v-list-item-title v-text="fouthList.title"></v-list-item-title>
-                    </v-list-item>
-                </v-list-group>
+                    <v-list-group no-action>        
+                        <template v-slot:activator>
+                            <v-list-item-title>รายงาน</v-list-item-title>
+                        </template>
+                        <v-list-item v-for="(ThirdList, i) in ThirdList" :key="i" link router :to="ThirdList.route">
+                            <v-list-item-title v-text="ThirdList.title"></v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
 
-                <v-list-group no-action value="true">
-                    <template v-slot:activator>
-                        <v-list-item-title>ข้อมูลส่วนตัว</v-list-item-title>
-                    </template>
-                    <v-list-item v-for="(fiveList, i) in fiveList" :key="i" link router :to="fiveList.route">
-                        <v-list-item-title v-text="fiveList.title"></v-list-item-title>
-                    </v-list-item>
-                </v-list-group>
+                    <v-list-group no-action>
+                        <template v-slot:activator>
+                            <v-list-item-title>ตั้งค่าระบบ</v-list-item-title>
+                        </template>
+                        <v-list-item v-for="(fouthList, i) in fouthList" :key="i" link router :to="fouthList.route">
+                            <v-list-item-title v-text="fouthList.title"></v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
 
-            </v-list>
+                    <v-list-group no-action>
+                        <template v-slot:activator>
+                            <v-list-item-title>ข้อมูลส่วนตัว</v-list-item-title>
+                        </template>
+                        <v-list-item v-for="(fiveList, i) in fiveList" :key="i" link router :to="fiveList.route">
+                            <v-list-item-title v-text="fiveList.title"></v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
+
+                </v-list>
         </v-navigation-drawer>
 
-        <v-toolbar-title>
-          <span class="font-weight-light">TPS</span>
-          <span>STOCK</span>
-        </v-toolbar-title>
-        
-        <v-spacer></v-spacer>
-
-        <div id="app-toolbar-user">
-          <v-btn text red>
-            <span>USER</span>
-          </v-btn>
-        </div>
-      </v-toolbar>
-    </nav>
-  </div>
+        <v-app-bar app > 
+            <v-app-bar-nav-icon v-on:click="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-toolbar-title>
+                <span class="font-weight-light">TPS</span>
+                <span>STOCK</span>
+            </v-toolbar-title>
+            
+            <v-spacer></v-spacer>
+            <div id="app-toolbar-user">
+                <v-btn text>
+                    <span>USER</span>
+                </v-btn>
+            </div>
+        </v-app-bar>
+    </div>
 </template>
 
 <script>
@@ -103,7 +98,7 @@ export default {
           }
       ],
       FirstList: [
-          {title: 'รายการวัสดุ-อุปกรณ์', route:'/mangement'},
+          {title: 'รายการวัสดุ-อุปกรณ์', route:'/management'},
           {title:'รับเข้า/เพิ่มจำนวน', route:'/receive'},
           {title:'เบิก/จ่าย', route:'/disburse'},
           {title:'ยกเลิกรายการ อนุมัติ', route:'/cancel'}
