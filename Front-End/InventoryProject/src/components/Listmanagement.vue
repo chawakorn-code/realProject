@@ -13,8 +13,6 @@
                         <v-toolbar flat>
                             <v-toolbar-title>Test</v-toolbar-title>
                             <v-spacer></v-spacer>
-                            <v-btn color="primary" dark class="mb-2">Button Test redirection</v-btn>
-                            <v-spacer></v-spacer>
                             <v-dialog v-model ="dialog" max-width="820px">
                                 <template v-slot:activator="{on,attrs}">
                                     <v-btn
@@ -22,7 +20,8 @@
                                     dark
                                     class="mb-2"
                                     v-bind="attrs"
-                                    v-on="on">New Item</v-btn>
+                                    v-on:click="newItem"
+                                    >New Item</v-btn>
                                 </template>
                                 <v-card>
                                     <v-card-title>
@@ -117,17 +116,15 @@ export default {
     created() {
         this.getList()
     },
-    computed: {
-        formTitle () {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-        },
-    },
     watch: {
         dialog (val) {
             val || this.close()
         },
     },
     methods: {
+        newItem() {
+            this.$router.push({name: 'addNewItem'});
+        },
         getList() {
             axios.get('http://localhost:3000/inventory').then(
                 result => {
