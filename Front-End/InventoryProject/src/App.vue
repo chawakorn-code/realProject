@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style>
-body {
+/* body {
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -35,7 +35,7 @@ body {
   overflow: hidden;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
-}
+} */
 #app {
   font-family: Helvetica Neue, Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
