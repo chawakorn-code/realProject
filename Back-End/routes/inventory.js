@@ -160,4 +160,16 @@ router.get('/inventory/outstock', (req,res) => {
     })
 })
 
+//get recent addin by id
+router.get('/inventory/:id/addin', (req,res) => {
+    var id = req.params.id
+    sql = "SELECT `amount` FROM `transaction` WHERE `inventoryID` = "+ id +" AND `type` = 'ยอดยกมา' ORDER BY time DESC LIMIT 1 "
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 module.exports = router;
