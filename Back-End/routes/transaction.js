@@ -99,6 +99,57 @@ router.delete('/transaction', (req,res) => {
     })
 })
 
+//add addin transaction
+router.post('/transaction/addin', (req,res) => {
+    var id = req.body.id
+    var No = req.body.No
+    var inventoryID = req.body.inventoryID
+    var amount = req.body.amount
+    sql = "INSERT INTO `transaction` (`id`, `No`, `type`, `inventoryID`, `time`, `userID`, `amount`, `location`, `detail`) VALUES ('" + id + "', '" + No + "', 'ยอดยกมา', '" + inventoryID + "', CURRENT_TIMESTAMP, NULL, '" + amount + "', NULL, NULL);"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get log by date
+router.get('/transaction/report', (req,res) => {
+    var startDate = req.body.startDate
+    var endDate = req.body.endDate
+    sql = "SELECT * FROM `transaction` WHERE `time` BETWEEN '" + startDate + "' AND '" + endDate + "'"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get recent transaction by inventoryID
+router.get('/transaction/recent/:id', (req,res) => {
+    var id = req.params.id
+    sql = "SELECT * FROM `transaction` WHERE inventoryID = " + id +" AND type LIKE 'ขอเบิก' ORDER BY time DESC LIMIT 1;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get transaction value
+router.get('/transaction/value', (req,res) => {
+    sql = "SELECT t.id, t.amount, i.price, t.amount*i.price AS value FROM `transaction` t LEFT JOIN inventory i ON t.inventoryID = i.id;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 //get all approval
 router.get('/approval', (req,res) => {
     sql = "SELECT * FROM `approval`;"
