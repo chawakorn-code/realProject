@@ -127,6 +127,19 @@ router.get('/inventory/getid/:name', (req,res) => {
     })
 })
 
+//update inventory amount by id
+router.patch('/inventory/amount', (req,res) => {
+    var id = req.body.id
+    var amount = req.body.amount
+    sql = "UPDATE `inventory` SET `amount` = `amount` +  "+ amount +"  WHERE `id` =  "+ id +" ;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 //get inventory where amount > max
 router.get('/inventory/highstock', (req,res) => {
     sql = "SELECT * FROM `inventory` WHERE `amount` > `max`"
