@@ -2,7 +2,7 @@
 const express = require('express')
 const apiroutes = require('./routes');
 const mysql = require('mysql')
-const db = require('./db/database');
+// const db = require('./db/database');
 const port = 3000
 const app = express();
 
@@ -17,6 +17,8 @@ const inventoryRoute = require('./routes/inventory')
 app.use(inventoryRoute)
 const transactionRoute = require('./routes/transaction')
 app.use(transactionRoute)
+const categoryRoute = require('./routes/category')
+app.use(categoryRoute)
 
 //start server
 app.listen(process.env.PORT || port, () => {

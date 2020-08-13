@@ -13,7 +13,7 @@
                         <v-row >
                             <v-col cols="12" md="6">
                                 <v-form>
-                                    <v-text-field v-model="codeItem" label="รหัส" outlined dense></v-text-field>
+                                    <v-text-field v-model="codeItem"  label="รหัส" outlined dense></v-text-field>
                                 </v-form>
                             </v-col>
                             <v-col cols="12" md="6">
@@ -33,9 +33,10 @@
                             <v-col cols="12" md="6">
                                 <v-form>
                                     <v-select
-                                    v-model ="categoryOption.id"
+                                    v-model="categoryOption.id"
                                     :items="categoryOption"
                                     item-text="category"
+                                    item-value="id"
                                     label="หมวดหมู่"
                                     dense
                                     solo
@@ -45,9 +46,10 @@
                             <v-col cols="12" md="6">
                                 <v-form>
                                     <v-select
-                                    v-model="itemLocation.id"
+                                    v-model="itemLocation.locationID"
                                     :items="itemLocation"
                                     item-text="name"
+                                    item-value="locationID"
                                     label="สถานที่จัดเก็บ"
                                     dense
                                     solo
@@ -91,6 +93,7 @@
                                     v-model="itemStatus.value"
                                     :items="itemStatus"
                                     item-text="text"
+                                    item-value="value"
                                     label="สถานะ"
                                     dense
                                     solo
@@ -105,7 +108,7 @@
                         </v-row> -->
                         <v-row>
                             <v-col cols="12" sm="6">
-                                <v-btn block large dense color="success" v-on:click="summit">บันทึก</v-btn>
+                                <v-btn block large dense color="success" v-on:click="submitItem" type="submit">บันทึก</v-btn>
                             </v-col>
                             <v-col cols="12" md="6">
                                 <v-btn block large dense color="error">ยกเลิก</v-btn>
@@ -124,6 +127,7 @@ export default {
     data () {
         return {
             codeItem: '',
+            pic: '',
             name: '',
             price: '',
             unit:'',
@@ -146,7 +150,6 @@ export default {
         getCategory () {
             axios.get('http://localhost:3000/category').then(
                 result => {
-                    console.log(result.data)
                     this.categoryOption = result.data
                 }
             ),
@@ -157,8 +160,6 @@ export default {
         getItemLocation () {
             axios.get('http://localhost:3000/location').then(
                 result => {
-                    console.log(result.data)
-                    console.log(result)
                     this.itemLocation = result.data
                 }
             ),
@@ -166,9 +167,37 @@ export default {
                 console.error(error)
             }
         },
-        summitItem () {
-            
-        }
+       async submitItem () { 
+            console.log(
+            " name:" + this.name,
+            "code: " + this.codeItem,
+            "price: " + this.price,
+            "amount: " + this.amount,
+            "min: " + this.min,
+            "max: " + this.max,
+            "category: " +this.categoryOption.id,
+            "status: " + this.itemStatus.value,
+            "Location: " + this.itemLocation.locationID,
+            "unit: " +this.unit)
+            axios.post('http://localhost:3000/inventory',
+            {
+                name: this.name,
+                pic: '',
+                price: this.price,
+                unit: this.unit,
+                min: this.min,
+                max: this.max,
+                amount: this.amount,
+                itemLocation: this.itemLocation.locationID,
+                categoryOption: this.categoryOption.id,
+                itemStatus: this.itemStatus.value,   
+            }
+            ).then((result) => {
+                console.log(result)
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
     }
 }
 </script>

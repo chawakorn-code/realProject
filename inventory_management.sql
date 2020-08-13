@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 08, 2020 at 10:12 AM
+-- Generation Time: Aug 13, 2020 at 05:14 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `approval` (
-  `id` int(11) NOT NULL,
-  `transactionID` int(11) NOT NULL,
+  `id` bigint(255) NOT NULL,
+  `transactionID` bigint(255) NOT NULL,
   `adminID` int(11) DEFAULT NULL,
   `time` timestamp NULL DEFAULT NULL,
   `detail` text COLLATE utf8_unicode_ci,
@@ -43,6 +43,14 @@ CREATE TABLE `approval` (
 
 INSERT INTO `approval` (`id`, `transactionID`, `adminID`, `time`, `detail`, `status`) VALUES
 (1, 1, NULL, NULL, NULL, 'รอการอนุมัติ');
+
+--
+-- Triggers `approval`
+--
+DELIMITER $$
+CREATE TRIGGER `edit-app` AFTER UPDATE ON `approval` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('แก้ไขสถานะใบเบิก id = ',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -65,6 +73,22 @@ INSERT INTO `category` (`id`, `No`, `category`, `adminID`) VALUES
 (1, 1, 'วัสดุสำนักงาน', 1),
 (2, 2, 'วัสดุสิ้นเปลือง', 1);
 
+--
+-- Triggers `category`
+--
+DELIMITER $$
+CREATE TRIGGER `del-cat` AFTER DELETE ON `category` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ลบหมวดหมู่ "',OLD.category,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `edit-cat` AFTER UPDATE ON `category` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('แก้ไขหมวดหมู่ id = ',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ins-cat` AFTER INSERT ON `category` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('เพิ่มหมวดหมู่ "',NEW.category,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +109,22 @@ INSERT INTO `department` (`id`, `No`, `name`) VALUES
 (1, 1, 'Admin'),
 (2, 2, 'operation');
 
+--
+-- Triggers `department`
+--
+DELIMITER $$
+CREATE TRIGGER `del-dep` AFTER DELETE ON `department` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ลบหน่วยงาน "',OLD.name,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `edit-dep` AFTER UPDATE ON `department` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('แก้ไขหน่วยงาน id = ',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ins-dep` AFTER INSERT ON `department` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('เพิ่มหน่วยงาน "',NEW.name,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -93,6 +133,7 @@ INSERT INTO `department` (`id`, `No`, `name`) VALUES
 
 CREATE TABLE `inventory` (
   `id` int(11) NOT NULL,
+  `barcode` text COLLATE utf8_unicode_ci NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `pic` blob,
   `categoryID` int(11) NOT NULL,
@@ -109,10 +150,26 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES
-(1, 'test', NULL, 1, 'ตัว', 50, 5, 20, 15, 1, 'เบิกได้'),
-(2, 'testlow', NULL, 1, 'ชิ้น', 30.5, 10, 100, 8, 2, 'ใกล้หมดสต็อก'),
-(3, 'testhight', NULL, 1, 'ก้อน', 11.5, 20, 25, 30, 2, 'เบิกได้');
+INSERT INTO `inventory` (`id`, `barcode`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES
+(1, '', 'test', NULL, 1, 'ตัว', 50, 5, 30, 15, 1, 'เบิกได้'),
+(2, '', 'testlow', NULL, 1, 'ชิ้น', 30.5, 10, 100, 8, 2, 'เบิกได้'),
+(3, '', 'testhight', NULL, 1, 'ก้อน', 11.5, 20, 25, 30, 2, 'เบิกได้');
+
+--
+-- Triggers `inventory`
+--
+DELIMITER $$
+CREATE TRIGGER `del-inv` AFTER DELETE ON `inventory` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ลบวัสดุ "',OLD.name,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `edit-inv` AFTER UPDATE ON `inventory` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('แก้ไขวัสดุ id =',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ins-inv` AFTER INSERT ON `inventory` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('เพิ่มวัสดุ "',NEW.name,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -132,7 +189,54 @@ CREATE TABLE `location` (
 
 INSERT INTO `location` (`id`, `No`, `name`) VALUES
 (1, 1, 'ชั้น 1 ห้องช่าง'),
-(2, 2, 'ชั้น 2');
+(2, 2, 'ชั้น 2'),
+(3, 3, 'ชั้น 3'),
+(4, 4, 'ชั้น 4');
+
+--
+-- Triggers `location`
+--
+DELIMITER $$
+CREATE TRIGGER `del-loc` AFTER DELETE ON `location` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ลบสถานที่จัดเก็บ "',OLD.name,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `edit-loc` AFTER UPDATE ON `location` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('แก้ไขสถานที่จัดเก็บ id = ',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ins-loc` AFTER INSERT ON `location` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('เพิ่มสถานที่จัดเก็บ "',NEW.name,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `id` bigint(255) NOT NULL,
+  `detail` text COLLATE utf8_unicode_ci NOT NULL,
+  `user` text COLLATE utf8_unicode_ci,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES
+(8, 'เพิ่มสถานที่จัดเก็บ id = 5', 'root@localhost', '2020-08-06 04:20:04'),
+(9, 'ลบสถานที่จัดเก็บ', 'root@localhost', '2020-08-06 04:20:31'),
+(10, 'เพิ่มสถานที่จัดเก็บ \"ชั้น 5\"', 'root@localhost', '2020-08-06 04:22:47'),
+(11, 'แก้ไขสถานที่จัดเก็บ id = 5', 'root@localhost', '2020-08-06 04:25:54'),
+(12, 'ลบสถานที่จัดเก็บ \"ชั้น 5\"', 'root@localhost', '2020-08-06 04:26:00'),
+(13, 'เพิ่มหมวดหมู่ \"เครื่องครัว\"', 'root@localhost', '2020-08-06 04:32:33'),
+(14, 'แก้ไขหมวดหมู่ id = 3', 'root@localhost', '2020-08-06 04:32:44'),
+(15, 'ลบหมวดหมู่ \"เครื่องครัว\"', 'root@localhost', '2020-08-06 04:32:49'),
+(16, 'เพิ่มวัสดุ \"test\"', 'root@localhost', '2020-08-06 08:59:49'),
+(17, 'ลบวัสดุ \"test\"', 'root@localhost', '2020-08-06 09:00:27');
 
 -- --------------------------------------------------------
 
@@ -141,12 +245,12 @@ INSERT INTO `location` (`id`, `No`, `name`) VALUES
 --
 
 CREATE TABLE `transaction` (
-  `id` int(11) NOT NULL,
+  `id` bigint(255) NOT NULL,
   `No` int(11) NOT NULL,
   `type` text COLLATE utf8_unicode_ci NOT NULL,
   `inventoryID` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `userID` int(11) NOT NULL,
+  `userID` int(11) DEFAULT NULL,
   `amount` int(11) NOT NULL,
   `location` text COLLATE utf8_unicode_ci,
   `detail` text COLLATE utf8_unicode_ci
@@ -157,7 +261,25 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`id`, `No`, `type`, `inventoryID`, `time`, `userID`, `amount`, `location`, `detail`) VALUES
-(1, 1, 'ขอเบิก', 1, '2020-07-06 07:48:09', 1, 10, NULL, NULL);
+(1, 1, 'ขอเบิก', 1, '2020-07-07 07:48:09', 1, 10, NULL, NULL),
+(2, 2, 'ยอดยกมา', 1, '2020-08-04 08:57:45', NULL, 15, NULL, NULL),
+(3, 3, 'ยอดยกมา', 2, '2020-08-04 09:10:37', NULL, 8, NULL, NULL);
+
+--
+-- Triggers `transaction`
+--
+DELIMITER $$
+CREATE TRIGGER `del-tran` AFTER DELETE ON `transaction` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ยกเลิกคำร้อง id = ',OLD.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `edit-tran` AFTER UPDATE ON `transaction` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('แก้ไขคำร้อง id = ',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ins-tran` AFTER INSERT ON `transaction` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('เพิ่มคำร้อง id = ',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -186,6 +308,22 @@ INSERT INTO `user` (`id`, `username`, `password`, `name`, `email`, `role`, `depa
 (3, 'trainee', 'P@ssw0rd2020', 'trainee', 'trainee@thepractical.com', 'admin', 2, 'ใช้งาน');
 
 --
+-- Triggers `user`
+--
+DELIMITER $$
+CREATE TRIGGER `del-user` AFTER DELETE ON `user` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ลบผู้ใช้งาน "',OLD.username,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `edit-user` AFTER UPDATE ON `user` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('แก้ไขข้อมูลผู้ใช้งาน id = ',NEW.id), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ins-user` AFTER INSERT ON `user` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('เพิ่มผู้ใช้งาน "',NEW.username,'"'), USER(), CURRENT_TIMESTAMP)
+$$
+DELIMITER ;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -194,8 +332,8 @@ INSERT INTO `user` (`id`, `username`, `password`, `name`, `email`, `role`, `depa
 --
 ALTER TABLE `approval`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `transactionID` (`transactionID`),
-  ADD KEY `adminID` (`adminID`);
+  ADD KEY `adminID` (`adminID`),
+  ADD KEY `approval_ibfk_1` (`transactionID`);
 
 --
 -- Indexes for table `category`
@@ -225,6 +363,12 @@ ALTER TABLE `location`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transaction`
 --
 ALTER TABLE `transaction`
@@ -247,7 +391,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `approval`
 --
 ALTER TABLE `approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -271,13 +415,19 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `log`
+--
+ALTER TABLE `log`
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -293,7 +443,7 @@ ALTER TABLE `user`
 -- Constraints for table `approval`
 --
 ALTER TABLE `approval`
-  ADD CONSTRAINT `approval_ibfk_1` FOREIGN KEY (`transactionID`) REFERENCES `transaction` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `approval_ibfk_1` FOREIGN KEY (`transactionID`) REFERENCES `transaction` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `approval_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --

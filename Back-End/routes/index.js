@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser') //For get user input
 const cors = require('cors')
 const morgan = require('morgan')
-const database = require('../db/database') // import database file that already config
+// const database = require('../db/database') // import database file that already config
 
 const router = express.Router();
 

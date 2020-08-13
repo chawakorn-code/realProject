@@ -25,7 +25,7 @@ db.connect((err) => {
 
 //add inventory
 router.post('/inventory', (req,res) => {
-    var id = req.body.id
+    var barcode = req.body.barcode
     var name = req.body.name
     var pic = req.body.pic
     var categoryID = req.body.categoryID
@@ -36,7 +36,13 @@ router.post('/inventory', (req,res) => {
     var amount = req.body.amount
     var locationID = req.body.locationID
     var status = req.body.status
-    sql = "INSERT INTO `inventory` (`id`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES ('" + id + "', '" + name + "', '" + pic + "', '" + categoryID + "', '" + unit + "', '" + price + "', '" + min + "', '" + max + "', '" + amount + "', '" + locationID + "', '" + status + "');"
+<<<<<<< HEAD
+    console.log(req.body.id)
+    console.log(req.body.name)
+    sql = "INSERT INTO `inventory` (`id`,`name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES ('" + id + "', '" + name + "', '" + pic + "', '" + categoryID + "', '" + unit + "', '" + price + "', '" + min + "', '" + max + "', '" + amount + "', '" + locationID + "', '" + status + "');"
+=======
+    sql = "INSERT INTO `inventory` (`id`, `barcode`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES (NULL, '" + barcode + "', '" + name + "', '" + pic + "', '" + categoryID + "', '" + unit + "', '" + price + "', '" + min + "', '" + max + "', '" + amount + "', '" + locationID + "', '" + status + "');"
+>>>>>>> 7adf800e762d183cb60e838507dc677c6083c8a1
     db.query(sql, (err, results) => {
         if(err){
             throw err
@@ -127,6 +133,19 @@ router.get('/inventory/getid/:name', (req,res) => {
     })
 })
 
+//update inventory amount by id
+router.patch('/inventory/amount', (req,res) => {
+    var id = req.body.id
+    var amount = req.body.amount
+    sql = "UPDATE `inventory` SET `amount` = `amount` +  "+ amount +"  WHERE `id` =  "+ id +" ;"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
 //get inventory where amount > max
 router.get('/inventory/highstock', (req,res) => {
     sql = "SELECT * FROM `inventory` WHERE `amount` > `max`"
@@ -152,6 +171,18 @@ router.get('/inventory/lowstock', (req,res) => {
 //get inventory where amount = 0
 router.get('/inventory/outstock', (req,res) => {
     sql = "SELECT * FROM `inventory` WHERE `amount` = 0"
+    db.query(sql, (err, results) => {
+        if(err){
+            throw err
+        }
+    res.send(results)
+    })
+})
+
+//get recent addin by id
+router.get('/inventory/:id/addin', (req,res) => {
+    var id = req.params.id
+    sql = "SELECT `amount` FROM `transaction` WHERE `inventoryID` = "+ id +" AND `type` = 'ยอดยกมา' ORDER BY time DESC LIMIT 1 "
     db.query(sql, (err, results) => {
         if(err){
             throw err
