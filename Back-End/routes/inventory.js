@@ -25,7 +25,7 @@ db.connect((err) => {
 
 //add inventory
 router.post('/inventory', (req,res) => {
-    var id = req.body.id
+    var barcode = req.body.barcode
     var name = req.body.name
     var pic = req.body.pic
     var categoryID = req.body.categoryID
@@ -36,7 +36,7 @@ router.post('/inventory', (req,res) => {
     var amount = req.body.amount
     var locationID = req.body.locationID
     var status = req.body.status
-    sql = "INSERT INTO `inventory` (`id`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES ('" + id + "', '" + name + "', '" + pic + "', '" + categoryID + "', '" + unit + "', '" + price + "', '" + min + "', '" + max + "', '" + amount + "', '" + locationID + "', '" + status + "');"
+    sql = "INSERT INTO `inventory` (`id`, `barcode`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES (NULL, '" + barcode + "', '" + name + "', '" + pic + "', '" + categoryID + "', '" + unit + "', '" + price + "', '" + min + "', '" + max + "', '" + amount + "', '" + locationID + "', '" + status + "');"
     db.query(sql, (err, results) => {
         if(err){
             throw err
