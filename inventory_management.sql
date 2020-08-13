@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 06, 2020 at 06:51 AM
+-- Generation Time: Aug 13, 2020 at 05:14 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `approval` (
-  `id` int(11) NOT NULL,
-  `transactionID` int(11) NOT NULL,
+  `id` bigint(255) NOT NULL,
+  `transactionID` bigint(255) NOT NULL,
   `adminID` int(11) DEFAULT NULL,
   `time` timestamp NULL DEFAULT NULL,
   `detail` text COLLATE utf8_unicode_ci,
@@ -133,6 +133,7 @@ DELIMITER ;
 
 CREATE TABLE `inventory` (
   `id` int(11) NOT NULL,
+  `barcode` text COLLATE utf8_unicode_ci NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `pic` blob,
   `categoryID` int(11) NOT NULL,
@@ -149,10 +150,10 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES
-(1, 'test', NULL, 1, 'ตัว', 50, 5, 30, 15, 1, 'เบิกได้'),
-(2, 'testlow', NULL, 1, 'ชิ้น', 30.5, 10, 100, 8, 2, 'เบิกได้'),
-(3, 'testhight', NULL, 1, 'ก้อน', 11.5, 20, 25, 30, 2, 'เบิกได้');
+INSERT INTO `inventory` (`id`, `barcode`, `name`, `pic`, `categoryID`, `unit`, `price`, `min`, `max`, `amount`, `locationID`, `status`) VALUES
+(1, '', 'test', NULL, 1, 'ตัว', 50, 5, 30, 15, 1, 'เบิกได้'),
+(2, '', 'testlow', NULL, 1, 'ชิ้น', 30.5, 10, 100, 8, 2, 'เบิกได้'),
+(3, '', 'testhight', NULL, 1, 'ก้อน', 11.5, 20, 25, 30, 2, 'เบิกได้');
 
 --
 -- Triggers `inventory`
@@ -215,7 +216,7 @@ DELIMITER ;
 --
 
 CREATE TABLE `log` (
-  `id` int(11) NOT NULL,
+  `id` bigint(255) NOT NULL,
   `detail` text COLLATE utf8_unicode_ci NOT NULL,
   `user` text COLLATE utf8_unicode_ci,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -233,7 +234,9 @@ INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES
 (12, 'ลบสถานที่จัดเก็บ \"ชั้น 5\"', 'root@localhost', '2020-08-06 04:26:00'),
 (13, 'เพิ่มหมวดหมู่ \"เครื่องครัว\"', 'root@localhost', '2020-08-06 04:32:33'),
 (14, 'แก้ไขหมวดหมู่ id = 3', 'root@localhost', '2020-08-06 04:32:44'),
-(15, 'ลบหมวดหมู่ \"เครื่องครัว\"', 'root@localhost', '2020-08-06 04:32:49');
+(15, 'ลบหมวดหมู่ \"เครื่องครัว\"', 'root@localhost', '2020-08-06 04:32:49'),
+(16, 'เพิ่มวัสดุ \"test\"', 'root@localhost', '2020-08-06 08:59:49'),
+(17, 'ลบวัสดุ \"test\"', 'root@localhost', '2020-08-06 09:00:27');
 
 -- --------------------------------------------------------
 
@@ -242,7 +245,7 @@ INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES
 --
 
 CREATE TABLE `transaction` (
-  `id` int(11) NOT NULL,
+  `id` bigint(255) NOT NULL,
   `No` int(11) NOT NULL,
   `type` text COLLATE utf8_unicode_ci NOT NULL,
   `inventoryID` int(11) NOT NULL,
@@ -266,7 +269,7 @@ INSERT INTO `transaction` (`id`, `No`, `type`, `inventoryID`, `time`, `userID`, 
 -- Triggers `transaction`
 --
 DELIMITER $$
-CREATE TRIGGER `del-tran` AFTER DELETE ON `transaction` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ยกเลิกคำร้อง',OLD.id), USER(), CURRENT_TIMESTAMP)
+CREATE TRIGGER `del-tran` AFTER DELETE ON `transaction` FOR EACH ROW INSERT INTO `log` (`id`, `detail`, `user`, `timestamp`) VALUES (NULL, CONCAT('ยกเลิกคำร้อง id = ',OLD.id), USER(), CURRENT_TIMESTAMP)
 $$
 DELIMITER ;
 DELIMITER $$
@@ -329,8 +332,8 @@ DELIMITER ;
 --
 ALTER TABLE `approval`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `transactionID` (`transactionID`),
-  ADD KEY `adminID` (`adminID`);
+  ADD KEY `adminID` (`adminID`),
+  ADD KEY `approval_ibfk_1` (`transactionID`);
 
 --
 -- Indexes for table `category`
@@ -388,13 +391,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `approval`
 --
 ALTER TABLE `approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `department`
@@ -412,19 +415,19 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -440,7 +443,7 @@ ALTER TABLE `user`
 -- Constraints for table `approval`
 --
 ALTER TABLE `approval`
-  ADD CONSTRAINT `approval_ibfk_1` FOREIGN KEY (`transactionID`) REFERENCES `transaction` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `approval_ibfk_1` FOREIGN KEY (`transactionID`) REFERENCES `transaction` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `approval_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
