@@ -26,10 +26,10 @@ db.connect((err) => {
 
 //add department
 router.post('/department', (req,res) => {
-    var id = req.body.id
+    //var id = req.body.id
     var No = req.body.No
     var name = req.body.name
-    sql = "INSERT INTO `department` (`id`, `No`, `name`) VALUES ('" + id + "', '"+ No +"', '" + name + "');"
+    sql = "INSERT INTO `department` (`id`, `No`, `name`) VALUES (NULL, '"+ No +"', '" + name + "');"
     db.query(sql, (err, results) => {
         if(err){
             throw err
@@ -78,10 +78,10 @@ router.delete('/department', (req,res) => {
 
 //add location
 router.post('/location', (req,res) => {
-    var id = req.body.id
+    //var id = req.body.id
     var No = req.body.No
     var name = req.body.name
-    sql = "INSERT INTO `location` (`id`, `No`, `name`) VALUES ('" + id + "', '"+ No +"', '" + name + "');"
+    sql = "INSERT INTO `location` (`id`, `No`, `name`) VALUES (NULL, '"+ No +"', '" + name + "');"
     db.query(sql, (err, results) => {
         if(err){
             throw err
@@ -130,7 +130,7 @@ router.patch('/location/:id', (req,res) => {
 
 //add user
 router.post('/user', (req,res) => {
-    var id = req.body.id
+    //var id = req.body.id
     var username = req.body.username
     var password = req.body.password
     var name = req.body.name
@@ -138,7 +138,7 @@ router.post('/user', (req,res) => {
     var role = req.body.role
     var departmentID = req.body.departmentID
     var status = req.body.status
-    sql = "INSERT INTO `user` (`id`, `username`, `password`, `name`, `email`, `role`, `departmentID`, `status`) VALUES ('" + id + "', '" + username + "', '" + password + "', '" + name + "', '" + email + "', '" + role + "', '" + departmentID + "', '" + status + "');"
+    sql = "INSERT INTO `user` (`id`, `username`, `password`, `name`, `email`, `role`, `departmentID`, `status`) VALUES (NULL, '" + username + "', '" + password + "', '" + name + "', '" + email + "', '" + role + "', '" + departmentID + "', '" + status + "');"
     db.query(sql, (err, results) => {
         if(err){
             throw err
@@ -214,11 +214,11 @@ router.get('/user', (req,res) => {
 
 //add category
 router.post('/category', (req,res) => {
-    var id = req.body.id
+    //var id = req.body.id
     var No = req.body.No
     var category = req.body.category
     var adminID = req.body.adminID
-    sql = "INSERT INTO `category` (`id`, `No`, `category`, `adminID`) VALUES ('" + id + "', '" + No + "', '" + category + "', '" + adminID + "');"
+    sql = "INSERT INTO `category` (`id`, `No`, `category`, `adminID`) VALUES (NULL, '" + No + "', '" + category + "', '" + adminID + "');"
     db.query(sql, (err, results) => {
         if(err){
             throw err
